@@ -4,6 +4,7 @@
 #include "../include/shell.h"
 #include "../include/input.h"
 #include "../include/parser.h"
+#include "../include/process.h"
 
 int main()
 {
@@ -11,7 +12,7 @@ int main()
     char **tokens;
 
     printf("\n");
-    printf("%s Version 3.0\n", SHELL_NAME);
+    printf("%s Version 4.0\n", SHELL_NAME);
     printf("\n");
 
     while(1)
@@ -26,11 +27,7 @@ int main()
         }
 
         tokens = parse_line(line);
-
-        printf("Parsed Tokens\n");
-        for(int i = 0; tokens[i] != NULL; i++)
-            printf("argv[%d] = %s\n", i, tokens[i]);
-
+        execute(tokens);
         free_tokens(tokens);
         free(line);
     }
