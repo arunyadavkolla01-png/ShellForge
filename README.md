@@ -1,9 +1,7 @@
-## Week 5 Features
+## Week 6 Features
 
-- Built-in command support
-- cd
-- pwd
-- help
-- clear
-- exit
-- Environment variables
+- Signal handling
+- SIGINT support
+- SIGCHLD support
+- Zombie cleanup
+- Shell survives Ctrl+C
