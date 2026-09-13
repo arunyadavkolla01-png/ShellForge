@@ -5,6 +5,7 @@
 #include "../include/input.h"
 #include "../include/parser.h"
 #include "../include/process.h"
+#include "../include/builtin.h"
 
 int main()
 {
@@ -12,7 +13,7 @@ int main()
     char **tokens;
 
     printf("\n");
-    printf("%s Version 4.0\n", SHELL_NAME);
+    printf("%s Version 5.0\n", SHELL_NAME);
     printf("\n");
 
     while(1)
@@ -27,7 +28,12 @@ int main()
         }
 
         tokens = parse_line(line);
-        execute(tokens);
+
+        if(execute_builtin(tokens) == 0)
+        {
+            execute(tokens);
+        }
+
         free_tokens(tokens);
         free(line);
     }
