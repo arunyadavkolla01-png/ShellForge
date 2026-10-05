@@ -7,6 +7,7 @@
 #include "../include/process.h"
 #include "../include/builtin.h"
 #include "../include/signals.h"
+#include "../include/pipes.h"
 
 int main()
 {
@@ -16,13 +17,14 @@ int main()
     initialize_signals();
 
     printf("\n");
-    printf("%s Version 6.0\n", SHELL_NAME);
+    printf("%s Version 7.0\n", SHELL_NAME);
     printf("\n");
 
     while(1)
     {
         printf("myshell> ");
         line = read_line();
+        if(line == NULL) break;
 
         if(strcmp(line, "exit") == 0)
         {
@@ -30,14 +32,31 @@ int main()
             break;
         }
 
-        tokens = parse_line(line);
-
-        if(execute_builtin(tokens) == 0)
+        /* Check for pipe */
+        char *pipe_pos = strchr(line, '|');
+        if(pipe_pos != NULL)
         {
-            execute(tokens);
-        }
+            *pipe_pos = '\0';
+            char *left = line;
+            char *right = pipe_pos + 1;
 
-        free_tokens(tokens);
+            char **cmd1 = parse_line(left);
+            char **cmd2 = parse_line(right);
+
+            execute_pipe(cmd1, cmd2);
+
+            free_tokens(cmd1);
+            free_tokens(cmd2);
+        }
+        else
+        {
+            tokens = parse_line(line);
+            if(execute_builtin(tokens) == 0)
+            {
+                execute(tokens);
+            }
+            free_tokens(tokens);
+        }
         free(line);
     }
 
